@@ -1,0 +1,13 @@
+# Per-event timing overrides. Defaults live in scene code (self.beat(..., run=, wait=)).
+# Edit here to retime without touching scene logic; only the edited scene re-renders.
+#
+# [scene_id]
+# _speed = 1.0                         # optional multiplier for the whole scene (>1 = faster)
+# event_id = { run = 1.5, wait = 2.0 } # seconds
+
+[s01_scores]
+
+[s02_softmax]
+interpret = { wait = 3.0 }   # let the 46% insight land
+
+[s03_weighted_sum]

@@ -1,0 +1,29 @@
+[project]
+name = "myanim"
+version = "0.1.0"
+requires-python = ">=3.12"
+dependencies = [
+    "manim>=0.22.0",
+    "numpy>=2.5.4",
+    "pillow>=12.3.0",
+]
+
+[dependency-groups]
+dev = [
+    "pre-commit>=4.6.2",
+]
+
+[tool.ruff]
+line-length = 110
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP"]
+ignore = [
+    "E731",   # small lambdas are used for local helpers
+    "E741",   # `l` as a short loop name over labels
+]
+
+[tool.ruff.lint.isort]
+known-first-party = ["components"]
+known-local-folder = ["data", "shared"]   # project modules on PYTHONPATH at render time

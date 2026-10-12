@@ -1,0 +1,28 @@
+[project]
+title = "Scaled dot-product attention, one query"
+source = ["source/attention-note.md"]
+# collaborative: stop for storyboard approval before implementing (default)
+# autonomous:    proceed through all stages, log decisions in evaluation.md
+mode = "collaborative"
+
+# Scene order = video order. status: draft | approved | locked (see storyboard.md)
+[[scenes]]
+id = "s01_scores"
+file = "scenes/s01_scores.py"
+class = "S01Scores"
+status = "approved"
+target_seconds = 25
+
+[[scenes]]
+id = "s02_softmax"
+file = "scenes/s02_softmax.py"
+class = "S02Softmax"
+status = "approved"
+target_seconds = 25
+
+[[scenes]]
+id = "s03_weighted_sum"
+file = "scenes/s03_weighted_sum.py"
+class = "S03WeightedSum"
+status = "approved"
+target_seconds = 30

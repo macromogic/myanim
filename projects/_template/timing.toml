@@ -1,0 +1,6 @@
+# Per-event timing overrides (seconds). Defaults live in scene code.
+# [scene_id]
+# _speed = 1.0
+# event_id = { run = 1.5, wait = 2.0 }
+
+[s01_intro]

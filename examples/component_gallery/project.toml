@@ -1,0 +1,24 @@
+[project]
+title = "Component gallery"
+# Renders one short demo per shared component. scripts/previews.py copies the
+# results to assets/previews/. Add a scene here whenever a component is promoted.
+
+[[scenes]]
+id = "matrix_grid"
+file = "scenes/gallery.py"
+class = "MatrixGridDemo"
+
+[[scenes]]
+id = "weight_bars"
+file = "scenes/gallery.py"
+class = "WeightBarsDemo"
+
+[[scenes]]
+id = "formula"
+file = "scenes/gallery.py"
+class = "FormulaDemo"
+
+[[scenes]]
+id = "text"
+file = "scenes/gallery.py"
+class = "TextDemo"

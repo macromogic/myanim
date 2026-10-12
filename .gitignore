@@ -1,0 +1,10 @@
+.venv/
+__pycache__/
+*.pyc
+.DS_Store
+# rendered output (regenerable); keep final videos and review sheets out of git too
+**/renders/
+media/
+# fonts are downloaded by `uv run python scripts/fonts.py sync` (pinned in assets/fonts/fonts.toml)
+assets/fonts/*.otf
+assets/fonts/*.part

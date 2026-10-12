@@ -1,0 +1,37 @@
+# Install once per clone:  uv run pre-commit install
+# Run on everything:       uv run pre-commit run --all-files
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: mixed-line-ending
+        args: [--fix=lf]
+      - id: check-toml
+      - id: check-yaml
+      - id: check-merge-conflict
+      - id: check-symlinks
+      - id: detect-private-key
+      - id: check-added-large-files
+        args: [--maxkb=500]          # previews are < 50 KB; fonts/videos must not be committed
+
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.17.0
+    hooks:
+      - id: ruff-check
+        args: [--fix]
+      - id: ruff-format
+
+  - repo: local
+    hooks:
+      - id: no-generated-binaries
+        name: no font binaries or render output in git
+        language: fail
+        entry: "Font files are downloaded by `scripts/fonts.py sync`; renders are regenerable. Do not commit:"
+        files: '^assets/fonts/.*\.(otf|ttf|ttc|woff2?)$|(^|/)renders/|(^|/)media/'
+      - id: data-selfcheck
+        name: on-screen numbers self-check (projects/*/data.py)
+        language: system
+        entry: bash -c 'for f in "$@"; do uv run python "$f" > /dev/null || exit 1; done' --
+        files: '^projects/[^/]+/data\.py$'

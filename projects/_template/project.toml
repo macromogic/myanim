@@ -1,0 +1,17 @@
+[project]
+title = "{{title}}"
+source = []          # filled by new_project.py: files in source/
+mode = "collaborative"   # or "autonomous" (see SKILL.md "Autonomy")
+
+# Optional style overrides (default: components/style.py)
+# [style]
+# cjk = "JP"   # CJK glyph forms: SC (bundled) | TC | HK | JP | KR
+#              # then run: uv run python scripts/fonts.py sync
+
+# Scene order = video order. status: draft | approved | locked
+[[scenes]]
+id = "s01_intro"
+file = "scenes/s01_intro.py"
+class = "S01Intro"
+status = "draft"
+target_seconds = 20
