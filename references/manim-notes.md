@@ -11,9 +11,13 @@
   shadow builds.)
 - LaTeX (MacTeX/TeX Live with `dvisvgm`) is required for `MathTex`.
 - **`myanim: ModuleNotFoundError: No module named 'myanim'`** (editable install): on macOS,
-  Python ≥ 3.12.10 skips `.pth` files that carry the "hidden" file flag, and files in a
-  `.venv` can end up with it. `myanim setup` detects this; fix: `chflags -R nohidden .venv`
-  (or the tool's environment path it prints).
+  Python ≥ 3.12.10 skips `.pth` files that carry the "hidden" file flag. On the dev machine
+  some process outside uv/git/pre-commit repeatedly sets that flag on dot-folders *inside the
+  workspace* (`.venv`, `.git`, `.ruff_cache`), so `uv run myanim` in the clone breaks again
+  after a fix. Robust: use the global tool install (`uv tool install --editable .`, its
+  environment lives in `~/.local/share/uv/tools`, unaffected) or `uv run python -m myanim`
+  inside the clone (doesn't rely on the `.pth`). `chflags -R nohidden .venv` is a temporary fix;
+  `myanim setup` reports hidden `.pth` files.
 - pydub prints `SyntaxWarning`s on Python 3.12+; `render.py` silences them.
 
 ## Rendering

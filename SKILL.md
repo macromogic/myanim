@@ -12,8 +12,9 @@ All tools are subcommands of the `myanim` CLI and work from any working director
 
     myanim new | check | render | review | fonts | previews | setup | skill   (myanim <cmd> -h)
 
-If `myanim` is not on PATH, use `uv run --project "$SKILL_DIR" myanim ...` and suggest the
-install from the README (`uv tool install --editable "$SKILL_DIR"`).
+If `myanim` is not on PATH (or fails with `No module named 'myanim'`), use the fallback
+`PYTHONPATH="$SKILL_DIR" uv run --project "$SKILL_DIR" python -m myanim ...` and suggest the
+install from the README (`uv tool install --python 3.12 --editable "$SKILL_DIR"`).
 
 - **First use on a machine:** if `myanim render` / `myanim check` fails with missing fonts,
   LaTeX packages or tools, run `myanim setup` and report what it lists as missing.

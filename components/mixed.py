@@ -5,8 +5,8 @@ string at `$...$`, builds `Text` for prose and `MathTex` for math, and places al
 one shared baseline (measured from an invisible reference "x" in each piece, so
 descenders, subscripts and fractions don't shift alignment).
 
-    line = mixed(r"长度为 $\ell$ 的循环需要 $\ell + 1$ 次调用")
-    line = mixed(r"调用次数 $= n+m+k+\gcd(n+m, k+m)$", size=style.BODY_SIZE)
+    line = mixed(r"半径为 $r$ 的圆，面积是 $\pi r^2$")
+    line = mixed(r"二分查找只需 $\lceil \log_2 n \rceil$ 次比较", size=style.BODY_SIZE)
     line.math[0]          # the MathTex pieces, in order (e.g. to box or recolor one)
     line.prose[0]         # the Text pieces
     baseline_y(line)      # current baseline height

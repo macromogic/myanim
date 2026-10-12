@@ -8,10 +8,7 @@ from manim import (
     UP,
     Create,
     FadeIn,
-    Integer,
-    Line,
     ReplacementTransform,
-    Succession,
     SurroundingRectangle,
     Write,
 )
@@ -21,11 +18,8 @@ from components import (
     Formula,
     MatrixGrid,
     WeightBars,
-    baseline_y,
     caption,
     code_block,
-    count_to,
-    mixed,
     scene_title,
     source_tag,
     style,
@@ -36,8 +30,8 @@ class MatrixGridDemo(EduScene):
     def construct(self):
         g = MatrixGrid(
             [[0.9, 0.1, 0.0], [0.2, 0.7, 0.1], [0.0, 0.3, 0.7]],
-            row_labels=["A", "B", "C"],
-            col_labels=["A", "B", "C"],
+            row_labels=["sun", "cloud", "rain"],
+            col_labels=["sun", "cloud", "rain"],
             heat=style.PINK,
             heat_range=(0, 1),
             brackets=True,
@@ -55,7 +49,7 @@ class MatrixGridDemo(EduScene):
 
 class WeightBarsDemo(EduScene):
     def construct(self):
-        kw = dict(labels=["a", "b", "c", "d"], label_depth=0.9, max_height=2.6)
+        kw = dict(labels=["mon", "tue", "wed", "thu"], label_depth=0.9, max_height=2.6)
         bars = WeightBars([1.2, -0.3, 0.4, 0.8], value_range=(-0.5, 3.5), color=style.ORANGE, **kw)
         bars.move_baseline_to([0, -1.0, 0])
         self.beat("show", FadeIn(bars), run=0.8, wait=0.3)
@@ -100,29 +94,15 @@ class TextDemo(EduScene):
         )
 
 
-class MixedDemo(EduScene):
-    def construct(self):
-        line = mixed(r"长度为 $\ell$ 的循环需要 $\ell + 1$ 次调用", size=34)
-        y = baseline_y(line)
-        rule = Line(
-            [line.get_left()[0] - 0.2, y, 0],
-            [line.get_right()[0] + 0.2, y, 0],
-            color=style.GRID,
-            stroke_width=1,
-        )
-        rule.qa_ignore = True  # baseline guide, deliberately under text
-        num = Integer(0, font_size=48).next_to(line, DOWN, buff=0.6)
-        self.beat("show", FadeIn(line), FadeIn(rule), FadeIn(num), run=0.8, wait=0.3)
-        self.beat("count_to", Succession(*(count_to(num, i, i + 1) for i in range(5))), run=1.5, wait=0.8)
-
-
 class CodeBlockDemo(EduScene):
     def construct(self):
         block = code_block(
             [
-                "auto H = std::gcd(n + m, k + m);  // 只扫描前 g 个位置",
-                "for (auto pos = 0ULL; pos < H; pos++) {",
-                "    walk_cycle(pos);",
+                "int lo = 0, hi = n;              // 左闭右开区间 [lo, hi)",
+                "while (lo < hi) {",
+                "    int mid = lo + (hi - lo) / 2; // 避免溢出",
+                "    if (a[mid] < x) lo = mid + 1;",
+                "    else hi = mid;",
                 "}",
             ]
         )

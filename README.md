@@ -13,7 +13,7 @@ myanim setup                                         # checks tools/LaTeX, downl
 myanim skill install                                 # makes /myanim available in every Claude Code session
 ```
 - `--editable` runs the CLI straight from this clone: `git pull` updates the CLI and the skill
-  together. Inside the clone, `uv run myanim ...` works without installing.
+  together. Inside the clone, `uv run python -m myanim ...` works without installing.
 - `myanim setup` reports anything missing with the command to fix it (`--dev` also installs
   the git hooks, for working on the skill itself). If building `pycairo` fails with an
   `xcrun`/x86_64 error, or `myanim` says `No module named 'myanim'`, see

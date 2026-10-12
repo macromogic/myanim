@@ -24,11 +24,6 @@ file = "scenes/gallery.py"
 class = "TextDemo"
 
 [[scenes]]
-id = "mixed"
-file = "scenes/gallery.py"
-class = "MixedDemo"
-
-[[scenes]]
 id = "code_block"
 file = "scenes/gallery.py"
 class = "CodeBlockDemo"

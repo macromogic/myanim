@@ -5,9 +5,9 @@ which collide with the video's concept colors. `code_block` renders code in the 
 color with `//` comments muted, on a SURFACE panel, using the MONO font token (with
 CJK fallback, so Chinese comments work).
 
-    block = code_block(["auto H = std::gcd(n + m, k + m);  // 注释",
-                        "for (auto pos = 0ULL; pos < H; pos++) {",
-                        "    work(pos);",
+    block = code_block(["int lo = 0, hi = n;          // 左闭右开",
+                        "while (lo < hi) {",
+                        "    int mid = lo + (hi - lo) / 2;",
                         "}"])
     self.play(FadeIn(block))
     self.play(Create(SurroundingRectangle(block.lines[0], color=style.YELLOW)))

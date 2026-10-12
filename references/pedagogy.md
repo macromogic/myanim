@@ -9,22 +9,22 @@ makes those decisions explicit *before* any storyboard.
 1. **Concrete before abstract.** Show a specific example doing the thing, then name it,
    then generalize. Never open with a definition.
 2. **Every idea answers a question the viewer would ask.** Write the question first
-   ("why would a gcd appear?", "does it always loop back?"). If no viewer would ask it
+   ("why can we throw away half the array?", "does the loop always stop?"). If no viewer would ask it
    yet, the idea comes too early: motivate it or move it.
 3. **Let the viewer almost discover it.** Show the pattern before stating the rule (pause
    on "notice anything?"), then confirm.
 4. **Name things only when they are needed,** and only once the viewer has seen them.
-   Jargon used before it is earned ("permutation", "residue class") is a gap.
-5. **Justify, don't assert, the key steps.** "Permutations decompose into cycles" is a
-   claim; *following arrows until you must return* is an explanation. Spend screen time
+   Jargon used before it is earned ("invariant", "eigenvector") is a gap.
+5. **Justify, don't assert, the key steps.** "Binary search takes O(log n) steps" is a
+   claim; *halving the range until one element is left* is an explanation. Spend screen time
    on the steps the conclusion depends on; cut asides.
 6. **One new idea per beat, one recurring picture per video.** Reuse the same objects so
    the viewer's mental model carries over.
 7. **Payoff closes the opening question,** in the opening's terms.
 
 ## Building the audience contract (`audience.md`)
-- **Persona:** one concrete viewer ("can write a loop over an array; has never heard of
-  cycle decomposition"). Avoid "anyone interested in X".
+- **Persona:** one concrete viewer ("can write a loop over an array; has never seen a
+  logarithm in a complexity bound"). Avoid "anyone interested in X".
 - **Knowledge map:** list *every* concept the explanation relies on (including ones the
   source never mentions because its readers know them). Mark each:
   `assume` (persona knows it; say so in the contract) · `remind` (≤ 5 s, one picture) ·
