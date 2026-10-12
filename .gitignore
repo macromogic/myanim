@@ -8,3 +8,12 @@ media/
 # fonts are downloaded by `uv run python scripts/fonts.py sync` (pinned in assets/fonts/fonts.toml)
 assets/fonts/*.otf
 assets/fonts/*.part
+# Per-video projects are working data, not part of the skill. Only the template and the
+# workflow demo are tracked; keep other videos here (ignored) or in a separate repo.
+projects/*
+!projects/_template/
+!projects/attention-demo/
+
+# local editor / Claude Code settings
+.vscode/
+.claude/

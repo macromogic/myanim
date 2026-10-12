@@ -1,12 +1,12 @@
 [project]
 title = "{{title}}"
-source = []          # filled by new_project.py: files in source/
+source = []          # filled by `myanim new`: files in source/
 mode = "collaborative"   # or "autonomous" (see SKILL.md "Autonomy")
 
 # Optional style overrides (default: components/style.py)
 # [style]
 # cjk = "JP"   # CJK glyph forms: SC (bundled) | TC | HK | JP | KR
-#              # then run: uv run python scripts/fonts.py sync
+#              # then run: myanim fonts sync
 
 # Scene order = video order. status: draft | approved | locked
 [[scenes]]

@@ -25,13 +25,22 @@ def math_label(tex: str, color=style.TEXT, size: int = style.LABEL_SIZE, **kw) -
 
 
 def scene_title(text: str, subtitle: str | None = None) -> VGroup:
-    """Top-left title. Small enough to stay on screen as an anchor."""
-    title = Text(
-        text, font=style.FONT, font_size=style.HEADING_SIZE, color=style.TEXT, weight=style.TITLE_WEIGHT
-    )
+    """Top-left title. Small enough to stay on screen as an anchor. `$...$` parts are math."""
+    from .mixed import mixed
+
+    if "$" in text:
+        title = mixed(text, size=style.HEADING_SIZE, weight=style.TITLE_WEIGHT)
+    else:
+        title = Text(
+            text, font=style.FONT, font_size=style.HEADING_SIZE, color=style.TEXT, weight=style.TITLE_WEIGHT
+        )
     group = VGroup(title)
     if subtitle:
-        sub = Text(subtitle, font=style.FONT, font_size=style.CAPTION_SIZE, color=style.MUTED)
+        sub = (
+            mixed(subtitle, size=style.CAPTION_SIZE, color=style.MUTED)
+            if "$" in subtitle
+            else Text(subtitle, font=style.FONT, font_size=style.CAPTION_SIZE, color=style.MUTED)
+        )
         sub.next_to(title, DOWN, buff=style.BUFF_TIGHT, aligned_edge=LEFT)
         group.add(sub)
     group.to_corner(UL, buff=style.FRAME_MARGIN)
@@ -43,9 +52,13 @@ def caption(
 ) -> Text:
     """Bottom-center one-line explanation. Keep it short: one idea per caption.
 
-    Use **t2c** style coloring by passing `t2c={"query": style.BLUE}` via Text if needed;
-    for that, build Text directly and call `place_caption`.
+    `$...$` parts are typeset as math (via `mixed()`), e.g. caption("都是 $g$ 的倍数").
+    For t2c coloring, build Text directly and call `place_caption`.
     """
+    if "$" in text:
+        from .mixed import mixed
+
+        return place_caption(mixed(text, size=size, color=color), max_width=max_width)
     return place_caption(Text(text, font=style.FONT, font_size=size, color=color), max_width=max_width)
 
 
@@ -58,7 +71,8 @@ def place_caption(mob, max_width: float | None = None):
 
 
 def source_tag(ref: str) -> Text:
-    """Small top-right reference back to the source material (traceability)."""
+    """Small top-right citation. Opt-in only: use it for a public source the user explicitly
+    wants cited; never for the user's own material (references belong in the storyboard)."""
     tag = Text(ref, font=style.FONT, font_size=style.SMALL_SIZE, color=style.MUTED)
     tag.set_opacity(0.7)
     return tag.to_corner(UR, buff=style.FRAME_MARGIN * 0.6)

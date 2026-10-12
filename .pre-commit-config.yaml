@@ -28,7 +28,7 @@ repos:
       - id: no-generated-binaries
         name: no font binaries or render output in git
         language: fail
-        entry: "Font files are downloaded by `scripts/fonts.py sync`; renders are regenerable. Do not commit:"
+        entry: "Font files are downloaded by `myanim fonts sync`; renders are regenerable. Do not commit:"
         files: '^assets/fonts/.*\.(otf|ttf|ttc|woff2?)$|(^|/)renders/|(^|/)media/'
       - id: data-selfcheck
         name: on-screen numbers self-check (projects/*/data.py)

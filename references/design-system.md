@@ -20,7 +20,7 @@ time, color as meaning, motion that shows a relationship. No single creator's lo
 ## 2. Typography
 - Body text: `FONT` = Libertinus Serif with Noto Serif CJK SC as CJK fallback. Code:
   `MONO_FONT` = IBM Plex Mono (same CJK fallback). Titles use `TITLE_WEIGHT` (semibold).
-  Fonts are downloaded into `assets/fonts/` by `scripts/fonts.py sync` (pinned + checksummed);
+  Fonts are downloaded into `assets/fonts/` by `myanim fonts sync` (pinned + checksummed);
   always pass the token, never a family name.
   Math: LaTeX via `MathTex` / `Formula`, in **Computer Modern** (user decision 2026-10-12:
   keep the familiar LaTeX look; Libertinus Math was compared and declined for now. To
@@ -28,7 +28,7 @@ time, color as meaning, motion that shows a relationship. No single creator's lo
   re-measure `TEX_SCALE`, re-render and re-check layouts).
 - Mixed Latin/CJK strings work in one `Text`: Pango picks glyphs per character. CJK
   glyph forms default to SC; a project selects TC/HK/JP/KR with `[style] cjk = "…"` in
-  `project.toml` (`scripts/fonts.py sync` fetches it).
+  `project.toml` (`myanim fonts sync` fetches it).
 - **Symbols are always math.** Any variable or symbol (q, k_i, w_i, d_k, Σ) is set with
   `MathTex`, also inside labels: `math_label(r"q\ \text{(it)}")`, never `Text("q (it)")`.
   `\text{}` in math uses Libertinus, so words and symbols mix cleanly on one baseline.
@@ -41,7 +41,9 @@ time, color as meaning, motion that shows a relationship. No single creator's lo
 ## 3. Layout
 Frame is 14.2 × 8 units. Zones:
 - top-left: scene title + subtitle (`scene_title`)
-- top-right: source tag (`source_tag`, e.g. "source §2"), for traceability
+- top-right: free by default. **No on-screen source tags**: viewers don't know the source
+  document's sections. Traceability lives in `outline.md` / `storyboard.md` (§ refs). Show a
+  citation (`source_tag`) only for a public source the user explicitly asks to cite.
 - bottom center (y ≈ −3.35): one caption (`caption` / `place_caption`)
 - middle band (y ≈ −2.7 … 2.4): content. Usually one main visual, at most two
   side by side (diagram left, numbers/formula right).
@@ -67,6 +69,8 @@ grid; leave empty space rather than shrinking text below 20.
 - **Clear, then show:** never bring something in where something else is still fading out
   in the same beat; fade the old content (0.6–0.8 s), then write the new. Overlapping
   crossfades are fine only when the two occupy different areas.
+- **Changing words crossfade** (FadeOut old, FadeIn new); morphing one text into another
+  scrambles glyphs. Numbers may morph (`Transform`, `count_to`).
 - **Layers:** moving objects stay in front of what they pass over. Animate on-screen
   objects themselves (`FadeOut(*parts)`), not a new `VGroup` of them, which re-adds them
   on top. Use `set_z_index` when an object must stay visible over a highlight.

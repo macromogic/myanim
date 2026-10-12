@@ -1,4 +1,4 @@
-# Pinned font sources for assets/fonts/. Managed by scripts/fonts.py; do not hand-edit
+# Pinned font sources for assets/fonts/. Managed by myanim fonts; do not hand-edit
 # hashes. Each entry: target file, upstream URL (pinned tag/release), optional archive
 # member, sha256 of the final .otf, and group ("core", or "cjk-<REGION>").
 # All fonts: SIL Open Font License 1.1 (texts in OFL-*.txt next to this file).

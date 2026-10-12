@@ -2,7 +2,7 @@
 
 from manim import DOWN, FadeIn
 
-from components import EduScene, WeightBars, caption, scene_title, source_tag
+from components import EduScene, WeightBars, caption, scene_title
 
 import data
 from shared import CONCEPT_A
@@ -13,8 +13,6 @@ class S01Intro(EduScene):
 
     def construct(self):
         title = scene_title("1 · Title", "Subtitle")
-        self.beat(
-            "title", FadeIn(title, shift=0.2 * DOWN), FadeIn(source_tag("source §1")), run=0.8, wait=0.5
-        )
-        bars = WeightBars(data.EXAMPLE, labels=["a", "b", "c"], value_range=(0, 3), color=CONCEPT_A)
+        self.beat("title", FadeIn(title, shift=0.2 * DOWN), run=0.8, wait=0.5)
+        bars = WeightBars(data.EXAMPLE, labels=["apple", "pear", "plum"], value_range=(0, 3), color=CONCEPT_A)
         self.beat("main_idea", FadeIn(bars), FadeIn(caption(f"total = {data.TOTAL:.2f}")), run=1.0, wait=1.5)

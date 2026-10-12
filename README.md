@@ -4,19 +4,35 @@ An agent Skill (entry point: [`SKILL.md`](SKILL.md)) for turning technical mater
 short educational animations with Manim Community Edition. The workflow is:
 source → outline → storyboard → scenes → render → review → reusable components.
 
-## Setup (macOS, Apple Silicon)
+## Install
 ```bash
-brew install uv cairo pango pkgconf ninja ffmpeg   # + MacTeX/BasicTeX for MathTex
-uv sync                                            # if pycairo fails with an xcrun/x86_64 error, see references/manim-notes.md
-uv run python scripts/fonts.py sync                # download pinned fonts (~50 MB, not in git)
-uv run pre-commit install                          # git hooks (lint, format, guards)
-uv run manim --version                              # Manim Community v0.22.0
+brew install uv ffmpeg cairo pango pkgconf ninja     # + MacTeX/BasicTeX for MathTex
+git clone git@github.com:macromogic/myanim.git && cd myanim
+uv tool install --python 3.12 --editable .           # puts the `myanim` command on your PATH
+myanim setup                                         # checks tools/LaTeX, downloads pinned fonts (~50 MB)
+myanim skill install                                 # makes /myanim available in every Claude Code session
 ```
-Python 3.12 is pinned in `.python-version`. Fonts (Libertinus Serif, IBM Plex Mono, Noto
-Serif CJK) are downloaded from pinned upstream releases by `scripts/fonts.py sync` and
-registered automatically; no system font installation is needed. CJK text defaults to
-Simplified Chinese glyph forms; set `[style] cjk = "JP"` (TC/HK/JP/KR) in a project's
-`project.toml` and re-run `sync`. Details: `assets/fonts/README.md`.
+- `--editable` runs the CLI straight from this clone: `git pull` updates the CLI and the skill
+  together. Inside the clone, `uv run myanim ...` works without installing.
+- `myanim setup` reports anything missing with the command to fix it (`--dev` also installs
+  the git hooks, for working on the skill itself). If building `pycairo` fails with an
+  `xcrun`/x86_64 error, or `myanim` says `No module named 'myanim'`, see
+  `references/manim-notes.md`.
+- Fonts (Libertinus Serif, IBM Plex Mono, Noto Serif CJK) are not stored in git; CJK defaults
+  to Simplified Chinese glyph forms (`[style] cjk` in a project's `project.toml`, then
+  `myanim fonts sync`, for TC/HK/JP/KR).
+- `myanim skill install` links `~/.claude/skills/myanim` to this clone (`status`, `uninstall`).
+
+## Use
+In Claude Code, from any folder (e.g. your blog or a private videos repo):
+- `/myanim path/to/post.md`, or just ask: *"Make a short explainer video from path/to/post.md."*
+- The agent creates a project folder (asks where; `$MYANIM_PROJECTS` sets the default), then
+  stops twice for your review: the **audience contract** (who the video is for, what it must
+  explain) and the **storyboard**. After that it renders previews, reviews its own frames and
+  produces `renders/final/full.mp4`.
+
+Video projects are working data and are not part of this repo (only `projects/_template` and
+the workflow demo `projects/attention-demo` are tracked).
 
 ## Git hooks
 `.pre-commit-config.yaml` runs on every commit:
@@ -28,17 +44,17 @@ Simplified Chinese glyph forms; set `[style] cjk = "JP"` (TC/HK/JP/KR) in a proj
 
 Run everything manually: `uv run pre-commit run --all-files`.
 
-## Quick start
+## The CLI
 ```bash
-uv run python scripts/new_project.py my-topic --source path/to/post.md   # scaffold
-# ... agent writes outline.md, storyboard.md, data.py, scenes/ (see SKILL.md) ...
-uv run python scripts/render.py projects/my-topic        # 480p preview, changed scenes only
-uv run python scripts/review.py projects/my-topic        # contact sheets + QA report
-uv run python scripts/render.py projects/my-topic -q final
+myanim new my-topic --source post.md --dir ~/videos   # project from the template
+myanim check ~/videos/my-topic        # seconds: all layout/animation checks, no video
+myanim render ~/videos/my-topic       # 480p preview, changed scenes only
+myanim review ~/videos/my-topic       # contact + motion sheets, QA report
+myanim render ~/videos/my-topic -q final
+myanim fonts list | sync | add-cjk JP | verify
+myanim previews                       # component gallery -> assets/previews
 ```
-With Claude Code in this folder, the skill is available as `manim-edu`
-(`.claude/skills/manim-edu/SKILL.md` → `SKILL.md`). Example request:
-*"Use manim-edu on projects/my-topic/source/post.md and propose a storyboard."*
+`myanim <command> -h` shows each command's options.
 
 ## Reference project
 `projects/attention-demo/`: scaled dot-product attention for one query, 3 scenes, ~67 s.
@@ -52,6 +68,6 @@ references/         design system, Manim notes, storyboard guide, QA checklist, 
 components/         shared Manim package (style tokens, EduScene, MatrixGrid, WeightBars, Formula, text)
 assets/             shared static resources; previews/ of components
 examples/           component_gallery (runnable demos → previews)
-scripts/            new_project, render, review, previews
+myanim/             the CLI (new, check, render, review, fonts, previews, setup, skill)
 projects/           _template + one folder per video
 ```

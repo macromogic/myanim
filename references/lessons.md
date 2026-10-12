@@ -74,3 +74,27 @@ print(s._warnings)  # layout warnings per event
 16. **Fonts: pin and download, don't commit.** `assets/fonts/fonts.toml` pins each file to
     an upstream release + sha256; `scripts/fonts.py sync` restores them. A fresh-clone test
     (fonts removed → clear error → sync → re-render) gave pixel-identical frames.
+
+## From oa-interval-permutation (first real blog post, 2026-10-12)
+17. **Video ≠ blog.** Reorder for viewers: open on the result + a puzzle, end every scene on
+    the question the next one answers, keep one recurring object (the row) across scenes,
+    push engineering details (memory errors, integer types) to narration.
+18. **State captured at the wrong time is the #1 motion-bug family.** Seen four times:
+    LaggedStart transforms (demo 1), `ChangeDecimalToValue` start value, shared `mob.target`
+    of `.animate` built ahead, straight-line interpolation for a layout change. Rules: build
+    chained moves with explicit targets (`Transform(mob, mob.copy()...)`), counters with
+    `count_to`, layout changes with a parametric path (ValueTracker + updaters).
+19. **Layout changes need a path, not endpoints.** Row→ring by endpoint interpolation
+    collapses everything into the centre; bend along a curve with preserved arc length.
+20. **Checks must be refined against false positives with regression tests.** Each new
+    check was run on the old buggy code (must fire) and the current scenes (must stay quiet);
+    the regroup check was narrowed to "regrouped objects crossed by a mover".
+21. **CJK + math:** LaTeX can't set CJK here; `mixed()` places Pango prose and MathTex on one
+    measured baseline. Lone Latin letters in prose are symbols → `symbol_in_text`.
+22. **Third-party theming breaks color semantics** (Pygments in `Code`). Prefer monochrome
+    components whose only colors come from `style`.
+23. **Test the checker itself on known-bad input.** The overlap checks had silently skipped
+    every `MathTex` since the start (a MathTex parent reports fill opacity 0; only its glyphs
+    carry opacity). Found only when a zoomed frame showed a caption covering an index label.
+    Now: visibility from glyphs, glyph-level overlap tests, `mixed()` lines as one text unit,
+    identity de-duplication. Re-run all scenes of all projects after changing a check.

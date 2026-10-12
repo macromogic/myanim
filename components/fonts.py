@@ -1,6 +1,6 @@
 """Project fonts: register assets/fonts/*.otf with Pango so renders don't depend on
 system-installed fonts. Runs once when `components` is imported. The files are
-downloaded from pinned upstream sources by `scripts/fonts.py sync` (not stored in git).
+downloaded from pinned upstream sources by `myanim fonts sync` (not stored in git).
 
 Font tokens in style.py are Pango *fallback lists*, e.g. "Libertinus Serif, Noto Serif CJK SC":
 Latin glyphs come from the first family, CJK glyphs fall through to the second.
@@ -46,7 +46,7 @@ def check_families(*font_tokens: str) -> None:
             for fam in missing
             if fam.startswith("Noto Serif CJK ") and not fam.endswith(" SC")
         ]  # SC: synced by default
-        fix = "uv run python scripts/fonts.py sync" + (f" --cjk {','.join(cjk)}" if cjk else "")
+        fix = "myanim fonts sync" + (f" --cjk {','.join(cjk)}" if cjk else "")
         raise RuntimeError(
             f"fonts not available to Pango: {missing}. Font files are downloaded, "
             f"not stored in git. Fix: {fix}"

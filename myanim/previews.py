@@ -1,7 +1,7 @@
 """Render the component gallery and refresh assets/previews/ (PNG of last frame + MP4).
 
-uv run python scripts/previews.py            # all components
-uv run python scripts/previews.py -s formula # one component
+myanim previews            # all components
+myanim previews -s formula # one component
 """
 
 from __future__ import annotations
@@ -17,12 +17,14 @@ GALLERY = ROOT / "examples" / "component_gallery"
 OUT = ROOT / "assets" / "previews"
 
 
-def main():
-    ap = argparse.ArgumentParser()
+def main(argv: list[str] | None = None):
+    ap = argparse.ArgumentParser(
+        prog="myanim previews",
+    )
     ap.add_argument("-s", "--scenes")
-    args = ap.parse_args()
+    args = ap.parse_args(argv)
     extra = ["-s", args.scenes] if args.scenes else []
-    render = [sys.executable, str(ROOT / "scripts" / "render.py"), str(GALLERY), "--no-concat"] + extra
+    render = [sys.executable, "-m", "myanim", "render", str(GALLERY), "--no-concat"] + extra
     for flags in ([], ["--still"]):
         if subprocess.run(render + flags).returncode:
             sys.exit(1)

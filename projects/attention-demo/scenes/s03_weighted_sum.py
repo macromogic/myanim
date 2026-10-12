@@ -20,7 +20,7 @@ from manim import (
     Write,
 )
 
-from components import EduScene, Formula, MatrixGrid, place_caption, scene_title, source_tag, style
+from components import EduScene, Formula, MatrixGrid, place_caption, scene_title, style
 
 import data
 from shared import KEY, VALUE, WEIGHT
@@ -44,8 +44,7 @@ class S03WeightedSum(EduScene):
 
     def construct(self):
         title = scene_title("3 · Weighted sum of values", "What the query actually receives")
-        ref = source_tag("source §3")
-        self.beat("title", FadeIn(title, shift=0.2 * DOWN), FadeIn(ref), run=0.8, wait=0.5)
+        self.beat("title", FadeIn(title, shift=0.2 * DOWN), run=0.8, wait=0.5)
 
         # --- tables: weights · values = contributions ---------------------------------------
         n = len(data.TOKENS)

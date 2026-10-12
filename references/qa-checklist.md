@@ -1,6 +1,6 @@
 # QA checklist (Stage E)
 
-Run `scripts/render.py` then `scripts/review.py`, open every changed scene's contact sheet,
+Run `myanim render` then `myanim review`, open every changed scene's contact sheet,
 and go through this list. Record unresolved items in `evaluation.md`.
 
 ## Automatic (reported by EduScene / review.py; fix all)
@@ -9,9 +9,18 @@ and go through this list. Record unresolved items in `evaluation.md`.
 - [ ] no `text_crosses_box`
 - [ ] no `concurrent_animations` (same object animated twice at once → jumps)
 - [ ] no `regrouped_onscreen` (new group of on-screen objects → layer order changes)
+- [ ] no `text_morph` (changing words should crossfade, not morph)
+- [ ] no `pending_animate` (two unplayed `.animate` on one object share its target)
+- [ ] no `stale_start` (counter steps restarting from an old value)
 - [ ] no `crossfade_overlap` (something appears where something else is still fading out)
 - [ ] each `static hold ≥ 3 s` is deliberate (a key insight or the final frame)
 - [ ] duration within ±30 % of `target_seconds` (or the storyboard is updated)
+
+## Pedagogy (against the approved `audience.md`)
+- [ ] every `teach` item is shown and justified on screen, not just named
+- [ ] no concept is named before the viewer has seen it
+- [ ] each scene answers its motivation-chain question and raises the next
+- [ ] watching as the persona: no step makes you ask "why?" without an answer
 
 ## Correctness (agent judgment, every time)
 - [ ] every formula matches the source (compare symbol by symbol)

@@ -1,6 +1,6 @@
 [project]
 title = "Component gallery"
-# Renders one short demo per shared component. scripts/previews.py copies the
+# Renders one short demo per shared component. myanim previews copies the
 # results to assets/previews/. Add a scene here whenever a component is promoted.
 
 [[scenes]]
@@ -22,3 +22,13 @@ class = "FormulaDemo"
 id = "text"
 file = "scenes/gallery.py"
 class = "TextDemo"
+
+[[scenes]]
+id = "mixed"
+file = "scenes/gallery.py"
+class = "MixedDemo"
+
+[[scenes]]
+id = "code_block"
+file = "scenes/gallery.py"
+class = "CodeBlockDemo"

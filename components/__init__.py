@@ -6,9 +6,12 @@ Catalog with parameters, previews and limitations: components/README.md
 from manim import config as _config
 
 from . import style
+from .anim import count_to
+from .code import code_block
 from .fonts import check_families, register_project_fonts
 from .formula import Formula
 from .matrix_grid import MatrixGrid
+from .mixed import baseline_y, mixed
 from .scene import EduScene
 from .text import caption, label, math, math_label, place_caption, scene_title, source_tag
 from .weight_bars import WeightBars
@@ -24,6 +27,10 @@ __all__ = [
     "Formula",
     "MatrixGrid",
     "WeightBars",
+    "baseline_y",
+    "code_block",
+    "count_to",
+    "mixed",
     "caption",
     "label",
     "math",

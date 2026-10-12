@@ -1,14 +1,29 @@
 ---
-name: manim-edu
+name: myanim
 description: Turn technical source material (blog posts, papers, formulas, code, notes) into short, high-quality educational Manim animations about math, algorithms, ML and CS systems. Use when the user wants to plan a storyboard from material, implement or revise Manim scenes, render and inspect previews, retime scenes, or reuse/promote animation components. Not for text-to-speech or narrated-video production.
 ---
 
 # Manim educational video skill
 
-All paths are relative to the repository root (the folder containing this file).
-Run everything through uv: `uv run python scripts/<tool>.py ...` (setup: `README.md`).
+## Where things are and how to run them
+`SKILL_DIR` = the folder containing this SKILL.md (Claude Code reports it as the skill's base
+directory); `components/`, `references/`, `projects/_template/` below are relative to it.
+All tools are subcommands of the `myanim` CLI and work from any working directory:
+
+    myanim new | check | render | review | fonts | previews | setup | skill   (myanim <cmd> -h)
+
+If `myanim` is not on PATH, use `uv run --project "$SKILL_DIR" myanim ...` and suggest the
+install from the README (`uv tool install --editable "$SKILL_DIR"`).
+
+- **First use on a machine:** if `myanim render` / `myanim check` fails with missing fonts,
+  LaTeX packages or tools, run `myanim setup` and report what it lists as missing.
+- **Video projects** are working data, not part of the skill: create them where the user wants
+  (`myanim new --dir <folder>`, default `$MYANIM_PROJECTS` or `SKILL_DIR/projects`, which
+  is not version-controlled except `_template` and `attention-demo`).
+- **Invocation:** `/myanim <path to source>` or a request like "make a video from this post".
 
 ## Read first
+- `references/pedagogy.md` (the popular-science bar; mandatory before Stage A2)
 - `references/design-system.md` (colors, type, layout, pacing; mandatory for every scene)
 - `references/manim-notes.md` (Manim CE 0.22 gotchas found in practice)
 - `components/README.md` (what already exists: reuse before writing new code)
@@ -16,9 +31,11 @@ Run everything through uv: `uv run python scripts/<tool>.py ...` (setup: `README
 
 ## Autonomy
 `project.toml` → `mode`:
-- **collaborative** (default): stop after Stage B and ask the user to review the outline +
-  storyboard. Continue once they approve or edit; record approval by setting scene
-  `status = "approved"` in `project.toml` and the storyboard.
+- **collaborative** (default): two checkpoints. (1) Stop after Stage A2 and ask the user to
+  review the outline + audience contract; record approval as `status: approved` in
+  `audience.md`. (2) Stop after Stage B for the storyboard; record approval by setting scene
+  `status = "approved"` in `project.toml` and the storyboard. Never storyboard or render
+  against an unapproved audience contract.
 - **autonomous**: run all stages without stopping. Same files, same scripts; log every
   decision you would otherwise have asked about in `evaluation.md` → "Decisions taken".
 
@@ -32,8 +49,9 @@ Never regenerate a scene the request does not concern. Each scene is its own fil
 ## Workflow
 
 ### Stage 0: set up the project
-`uv run python scripts/new_project.py <slug> --source <file> [--title "..."]`
-creates `projects/<slug>/` from `projects/_template/` and copies the source material into `source/`.
+`myanim new <slug> --source <file> [--title "..."] [--dir <folder>]`
+creates `<folder>/<slug>/` from `projects/_template/` and copies the source material into
+`source/`. Ask the user where videos should live if it is not clear.
 
 ### Stage A: content analysis → `outline.md`
 Read all the source material. Fill in the template sections: audience and assumed
@@ -42,13 +60,24 @@ claims, numbers; with source section refs), **free to restructure/design**, and 
 *visual vs. narration* table: animate only what motion clarifies (processes, change,
 correspondence, geometry). Leave definitions, history and caveats to narration or a static frame.
 
+### Stage A2: audience contract → `audience.md` (checkpoint 1)
+The source was written for *its* readers; the video must work for a general audience
+(`references/pedagogy.md`). Write: a concrete persona; a knowledge map marking every
+concept the explanation relies on as `assume` / `remind` / `teach` / `skip`; the gap list
+(steps the source skips that the persona can't, each with a bridging visual); the
+motivation chain (questions the video answers, in order); scope cuts. Run the self-test in
+`pedagogy.md`. **Collaborative mode: stop here and ask for review.** Restructuring hooks and
+transitions is not enough: every `teach` item needs beats that justify it on screen.
+
 ### Stage B: storyboard → `storyboard.md`
-Follow `references/storyboard-guide.md`. One scene = one learning objective, 15–35 s.
+Follow `references/storyboard-guide.md`, built on the approved `audience.md`: scene order
+follows the motivation chain, every `teach` item gets beats, nothing is named before it is
+shown. One scene = one learning objective, 15–35 s.
 Per scene: id, status, target seconds, source refs, objective, visuals, a beat table
 (`event id | visual | narration note | ~s`), and the transition out. Fix the
 concept→color mapping for the whole video at the top. Narration notes are for the
 user's own voice-over only; no TTS.
-Register scenes in `project.toml`. **Collaborative mode: stop here and ask for review.**
+Register scenes in `project.toml`. **Collaborative mode: stop here and ask for review (checkpoint 2).**
 
 ### Stage C: assets and visual design
 Resource order: (1) user-provided visuals in `source/`, (2) `components/` and `assets/`,
@@ -69,11 +98,14 @@ something that hurts clarity; write a new local helper instead.
 - Symbols in math mode (`MathTex`, `math_label`); chained moves of one object in a
   `Succession`; animate on-screen objects directly, never via a new group.
 - Captions come from data (f-strings), never hand-copied numbers.
+- No on-screen source tags: source references stay in the outline/storyboard. Cite a public
+  source on screen (`source_tag`) only when the user asks for it.
 
 ### Stage E: render and QA (loop until clean)
 ```
-uv run python scripts/render.py projects/<slug>            # 480p preview, changed scenes only
-uv run python scripts/review.py projects/<slug>            # frames + report
+myanim check <project>             # seconds: all layout/animation checks, no video
+myanim render <project>            # 480p preview, changed scenes only
+myanim review <project>            # frames + report
 ```
 Then **look at** `renders/review/<scene>_sheet.png` (settled frame per event) **and**
 `<scene>_motion.png` (25/50/75 % through each animation) for every changed scene. Motion
@@ -86,7 +118,7 @@ the video. Fix, re-render (only changed scenes re-render), re-review.
 A render without errors is not a finished scene.
 
 Retiming without code changes: edit `timing.toml` (`event = { run = 1.5, wait = 2 }`, or
-`_speed` per scene). Final: `render.py projects/<slug> -q final` (1080p60) → `renders/final/full.mp4`.
+`_speed` per scene). Final: `render.py <project> -q final` (1080p60) → `renders/final/full.mp4`.
 
 ### Stage F: wrap-up and library maintenance
 1. Fill `evaluation.md`: correctness, clarity, pacing, reliability, human
@@ -95,7 +127,7 @@ Retiming without code changes: edit `timing.toml` (`event = { run = 1.5, wait = 
    if it is (a) tested in this render, (b) plausibly useful for ≥ 2 other topics, and
    (c) parameterized without project-specific data. To promote: move the code and add a
    docstring (use cases, params, example, limitations), a gallery scene in
-   `examples/component_gallery/` + `project.toml` entry, run `scripts/previews.py`,
+   `examples/component_gallery/` + `project.toml` entry, run `myanim previews`,
    add a row to `components/README.md`. Otherwise leave it in the project.
 3. Add generalizable lessons (not project trivia) to `references/lessons.md`. Fold
    repeated lessons into the design system or the Manim notes.
@@ -108,13 +140,11 @@ are the intended hooks for future alignment. Do not build audio processing unles
 ## Files at a glance
 | path | role |
 |---|---|
-| `components/` | shared package: `style`, `EduScene`, `MatrixGrid`, `WeightBars`, `Formula`, text helpers |
+| `components/` | shared package: `style`, `EduScene`, `MatrixGrid`, `WeightBars`, `Formula`, `mixed`, `code_block`, `count_to`, text helpers |
 | `assets/` | shared static resources (`previews/` of components; SVGs/images you promote) |
 | `examples/component_gallery/` | one runnable demo per component (source of previews) |
-| `projects/_template/` | skeleton copied by `new_project.py` |
+| `projects/_template/` | skeleton copied by `myanim new` (incl. `audience.md`) |
+| `<project>/` | per-video working data: **not version-controlled** (only `_template` and `attention-demo` are) |
 | `projects/attention-demo/` | complete reference project (outline → storyboard → scenes → evaluation) |
-| `scripts/render.py` | render scenes (hash-skip unchanged), concat `full.mp4` |
-| `scripts/review.py` | event frames, contact sheets, freeze + layout report |
-| `scripts/previews.py` | refresh component previews |
-| `scripts/fonts.py` | `sync` downloads pinned fonts (run after cloning); CJK region per project via `[style] cjk` |
-| `references/` | design system, Manim notes, storyboard guide, QA checklist, lessons |
+| `myanim/` | the `myanim` CLI: `new`, `check`, `render`, `review`, `fonts`, `previews`, `setup`, `skill` |
+| `references/` | pedagogy, design system, Manim notes, storyboard guide, QA checklist, lessons |

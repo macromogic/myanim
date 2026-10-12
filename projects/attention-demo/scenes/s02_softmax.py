@@ -16,7 +16,7 @@ from manim import (
     Write,
 )
 
-from components import EduScene, Formula, WeightBars, place_caption, scene_title, source_tag, style
+from components import EduScene, Formula, WeightBars, place_caption, scene_title, style
 
 import data
 from shared import KEY, WEIGHT, final_score_column
@@ -46,8 +46,7 @@ class S02Softmax(EduScene):
         col = final_score_column()  # identical to the last frame of s01
         self.add(col)
         title = scene_title("2 · Softmax", "From scores to weights")
-        ref = source_tag("source §2")
-        self.beat("title", FadeIn(title, shift=0.2 * DOWN), FadeIn(ref), run=0.8, wait=0.5)
+        self.beat("title", FadeIn(title, shift=0.2 * DOWN), run=0.8, wait=0.5)
 
         # --- scores become bars ---------------------------------------------------------
         bars = WeightBars(data.SCORES, value_range=(-0.5, 3.5), color=KEY, **BAR_KW)

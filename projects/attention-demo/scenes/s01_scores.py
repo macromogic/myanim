@@ -22,7 +22,7 @@ from manim import (
     Write,
 )
 
-from components import EduScene, math_label, place_caption, scene_title, source_tag, style
+from components import EduScene, math_label, place_caption, scene_title, style
 
 import data
 from shared import KEY, QUERY, final_score_column, scaled_header, score_column
@@ -33,8 +33,7 @@ class S01Scores(EduScene):
 
     def construct(self):
         title = scene_title("1 · Scores", "How well does each key match the query?")
-        ref = source_tag("source §1 · worked example")
-        self.beat("title", FadeIn(title, shift=0.2 * DOWN), FadeIn(ref), run=0.8, wait=1.0)
+        self.beat("title", FadeIn(title, shift=0.2 * DOWN), run=0.8, wait=1.0)
 
         # --- 2-D picture: query and keys ------------------------------------------
         plane = NumberPlane(
@@ -162,7 +161,7 @@ class S01Scores(EduScene):
         # --- hand-off: keep only the score column for s02 --------------------------------
         self.beat(
             "handoff",
-            *(FadeOut(m) for m in (plane, q, q_lab, *keys, *key_labs, formula, title, ref)),
+            *(FadeOut(m) for m in (plane, q, q_lab, *keys, *key_labs, formula, title)),
             run=0.8,
             wait=0.2,
         )

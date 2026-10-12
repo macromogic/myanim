@@ -10,10 +10,14 @@
   2026-10-12 and the rest of that Homebrew kept. Other x86_64 tools there may still
   shadow builds.)
 - LaTeX (MacTeX/TeX Live with `dvisvgm`) is required for `MathTex`.
+- **`myanim: ModuleNotFoundError: No module named 'myanim'`** (editable install): on macOS,
+  Python ≥ 3.12.10 skips `.pth` files that carry the "hidden" file flag, and files in a
+  `.venv` can end up with it. `myanim setup` detects this; fix: `chflags -R nohidden .venv`
+  (or the tool's environment path it prints).
 - pydub prints `SyntaxWarning`s on Python 3.12+; `render.py` silences them.
 
 ## Rendering
-- Always render through `scripts/render.py`. It sets `PYTHONPATH` so scenes can
+- Always render through `myanim render`. It sets `PYTHONPATH` so scenes can
   `from components import ...` and `import data`, widens the terminal so Rich
   tracebacks stay readable, and skips unchanged scenes.
 - Quality presets: preview `-ql` (480p15) for iteration, draft `-qm` (720p30),
@@ -38,6 +42,14 @@
   chained moves restart from the first position. `Succession` begins each sub-animation
   when it is reached, so chained moves are continuous. (Auto-checked:
   `concurrent_animations`.)
+- `mob.animate...` stores its target in the shared attribute `mob.target`; the animation is
+  assembled when played. Building two `.animate` moves of the same object before playing
+  the first (e.g. a list of moves prepared up front) makes the first one go to the *second*
+  target. Use `Transform(mob, mob.copy().move_to(p), path_arc=…)` for moves built ahead.
+  (Auto-checked: `pending_animate`.)
+- `ChangeDecimalToValue(num, v)` reads `num`'s current value when the animation is
+  *constructed*. Chained steps built up front (e.g. a counter in a `Succession`) all
+  restart from the old value. Use `count_to(num, start, end)`. (Auto-checked: `stale_start`.)
 - `play(FadeOut(VGroup(a, b)))` where a, b are already on screen adds that new VGroup on
   top, so a, b are drawn in front of everything for the animation (things moving past
   them slip behind). Use `FadeOut(a), FadeOut(b)`. (Auto-checked: `regrouped_onscreen`.)

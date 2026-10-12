@@ -3,11 +3,11 @@
 Font files are not kept in git. `assets/fonts/fonts.toml` pins every file to an upstream
 release/tag plus a sha256; this script fetches and verifies them.
 
-    uv run python scripts/fonts.py sync          # core fonts + every CJK region any project uses
-    uv run python scripts/fonts.py sync --cjk JP # ... plus JP
-    uv run python scripts/fonts.py add-cjk KR    # just one region
-    uv run python scripts/fonts.py list          # what is installed / needed
-    uv run python scripts/fonts.py verify        # re-check sha256 of installed files
+    myanim fonts sync          # core fonts + every CJK region any project uses
+    myanim fonts sync --cjk JP # ... plus JP
+    myanim fonts add-cjk KR    # just one region
+    myanim fonts list          # what is installed / needed
+    myanim fonts verify        # re-check sha256 of installed files
 
 Select a project's CJK region in its project.toml:
     [style]
@@ -123,8 +123,10 @@ def cmd_verify(_):
     sys.exit(1 if bad else 0)
 
 
-def main():
-    ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+def main(argv: list[str] | None = None):
+    ap = argparse.ArgumentParser(
+        prog="myanim fonts", description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
+    )
     sub = ap.add_subparsers(dest="cmd", required=True)
     s = sub.add_parser("sync")
     s.add_argument("--cjk", help="extra CJK regions, comma-separated")
@@ -134,7 +136,7 @@ def main():
     a.set_defaults(fn=cmd_add)
     sub.add_parser("list").set_defaults(fn=cmd_list)
     sub.add_parser("verify").set_defaults(fn=cmd_verify)
-    args = ap.parse_args()
+    args = ap.parse_args(argv)
     args.fn(args)
 
 

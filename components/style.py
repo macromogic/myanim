@@ -27,7 +27,7 @@ YELLOW = ManimColor("#F4D35E")  # reserved for transient "look here" highlights
 ACCENTS = [BLUE, ORANGE, GREEN, PINK, PURPLE]
 
 # --- Typography ----------------------------------------------------------------
-# Fonts live in assets/fonts/ (downloaded by scripts/fonts.py sync, pinned + checksummed)
+# Fonts live in assets/fonts/ (downloaded by myanim fonts sync, pinned + checksummed)
 # and are registered by components/fonts.py, so renders
 # are identical on any machine. Tokens are Pango fallback lists: Latin glyphs from the
 # first family, CJK glyphs from Noto Serif CJK in the selected region's glyph forms.
@@ -35,7 +35,7 @@ ACCENTS = [BLUE, ORANGE, GREEN, PINK, PURPLE]
 # CJK region: default below; a project overrides it in project.toml with
 #     [style]
 #     cjk = "JP"        # SC | TC | HK | JP | KR
-# `scripts/fonts.py sync` fetches every region a project selects.
+# `myanim fonts sync` fetches every region a project selects.
 CJK_REGIONS = {
     "SC": "Noto Serif CJK SC",  # Simplified Chinese (default)
     "TC": "Noto Serif CJK TC",  # Traditional Chinese (Taiwan)

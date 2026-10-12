@@ -1,6 +1,6 @@
 # Storyboard — Scaled dot-product attention (one query)
 
-Total target ≈ 80 s · 3 scenes · all numbers come from `data.py` (storyboard numbers are illustrative copies) · preview with `scripts/render.py`, review with `scripts/review.py`.
+Total target ≈ 80 s · 3 scenes · all numbers come from `data.py` (storyboard numbers are illustrative copies) · preview with `myanim render`, review with `myanim review`.
 
 **Color semantics (fixed for the whole video):** query = BLUE · key / score = ORANGE ·
 value = GREEN · attention weight = PINK · transient highlight = YELLOW.

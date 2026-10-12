@@ -1,16 +1,31 @@
 """One minimal, working demo per shared component (also the usage examples).
 
-Render:  uv run python scripts/previews.py
+Render:  myanim previews
 """
 
-from manim import DOWN, UP, Create, FadeIn, ReplacementTransform, Write
+from manim import (
+    DOWN,
+    UP,
+    Create,
+    FadeIn,
+    Integer,
+    Line,
+    ReplacementTransform,
+    Succession,
+    SurroundingRectangle,
+    Write,
+)
 
 from components import (
     EduScene,
     Formula,
     MatrixGrid,
     WeightBars,
+    baseline_y,
     caption,
+    code_block,
+    count_to,
+    mixed,
     scene_title,
     source_tag,
     style,
@@ -82,4 +97,39 @@ class TextDemo(EduScene):
             FadeIn(cap, shift=0.2 * UP),
             run=0.8,
             wait=1.0,
+        )
+
+
+class MixedDemo(EduScene):
+    def construct(self):
+        line = mixed(r"长度为 $\ell$ 的循环需要 $\ell + 1$ 次调用", size=34)
+        y = baseline_y(line)
+        rule = Line(
+            [line.get_left()[0] - 0.2, y, 0],
+            [line.get_right()[0] + 0.2, y, 0],
+            color=style.GRID,
+            stroke_width=1,
+        )
+        rule.qa_ignore = True  # baseline guide, deliberately under text
+        num = Integer(0, font_size=48).next_to(line, DOWN, buff=0.6)
+        self.beat("show", FadeIn(line), FadeIn(rule), FadeIn(num), run=0.8, wait=0.3)
+        self.beat("count_to", Succession(*(count_to(num, i, i + 1) for i in range(5))), run=1.5, wait=0.8)
+
+
+class CodeBlockDemo(EduScene):
+    def construct(self):
+        block = code_block(
+            [
+                "auto H = std::gcd(n + m, k + m);  // 只扫描前 g 个位置",
+                "for (auto pos = 0ULL; pos < H; pos++) {",
+                "    walk_cycle(pos);",
+                "}",
+            ]
+        )
+        self.beat("show", FadeIn(block), run=0.8, wait=0.3)
+        self.beat(
+            "highlight",
+            Create(SurroundingRectangle(block.lines[0], color=style.YELLOW, buff=0.06)),
+            run=0.6,
+            wait=0.8,
         )

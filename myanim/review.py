@@ -1,7 +1,7 @@
 """Inspect rendered scenes: event frames, contact sheets, pacing and layout report.
 
-    uv run python scripts/review.py projects/attention-demo            # all scenes, preview quality
-    uv run python scripts/review.py projects/attention-demo -s s02_softmax -q draft
+    myanim review projects/attention-demo            # all scenes, preview quality
+    myanim review projects/attention-demo -s s02_softmax -q draft
 
 For each scene it writes to <project>/renders/review/:
   <scene_id>/NN_<event>.png   frame right after each beat's animation settles
@@ -19,13 +19,11 @@ import argparse
 import json
 import re
 import subprocess
-import sys
 from pathlib import Path
 
 from PIL import Image, ImageDraw, ImageFont
 
-sys.path.insert(0, str(Path(__file__).resolve().parent))
-from render import load_project  # noqa: E402
+from myanim.render import load_project
 
 FREEZE_MIN = 3.0  # seconds of no visual change worth flagging
 
@@ -109,12 +107,14 @@ def contact_sheet(frames: list[tuple[str, Path]], out: Path, cols: int = 3, thum
     sheet.save(out)
 
 
-def main():
-    ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+def main(argv: list[str] | None = None):
+    ap = argparse.ArgumentParser(
+        prog="myanim review", description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
+    )
     ap.add_argument("project", type=Path)
     ap.add_argument("-s", "--scenes")
     ap.add_argument("-q", "--quality", default="preview")
-    args = ap.parse_args()
+    args = ap.parse_args(argv)
 
     project = args.project.resolve()
     cfg = load_project(project)

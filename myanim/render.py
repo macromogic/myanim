@@ -1,9 +1,9 @@
 """Render a project's scenes, skipping unchanged ones, then concatenate.
 
-    uv run python scripts/render.py projects/attention-demo                 # preview (480p15)
-    uv run python scripts/render.py projects/attention-demo -s s02_softmax  # one scene
-    uv run python scripts/render.py projects/attention-demo -q final        # 1080p60
-    uv run python scripts/render.py projects/attention-demo --still         # last frames only
+    myanim render projects/attention-demo                 # preview (480p15)
+    myanim render projects/attention-demo -s s02_softmax  # one scene
+    myanim render projects/attention-demo -q final        # 1080p60
+    myanim render projects/attention-demo --still         # last frames only
 
 Outputs: <project>/renders/<quality>/<scene_id>.mp4 and full.mp4.
 A scene is re-rendered only if its file, the project's shared .py files,
@@ -110,15 +110,17 @@ def concat(videos: list[Path], out: Path):
     listing.unlink()
 
 
-def main():
-    ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+def main(argv: list[str] | None = None):
+    ap = argparse.ArgumentParser(
+        prog="myanim render", description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
+    )
     ap.add_argument("project", type=Path)
     ap.add_argument("-s", "--scenes", help="comma-separated scene ids (default: all)")
     ap.add_argument("-q", "--quality", choices=QUALITY, default="preview")
     ap.add_argument("--force", action="store_true", help="ignore the unchanged-scene cache")
     ap.add_argument("--still", action="store_true", help="render last frame PNG only")
     ap.add_argument("--no-concat", action="store_true")
-    args = ap.parse_args()
+    args = ap.parse_args(argv)
 
     project = args.project.resolve()
     cfg = load_project(project)

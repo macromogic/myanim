@@ -17,8 +17,16 @@ Templates: `projects/_template/outline.md` and `storyboard.md`. Worked example:
 6. **Visual vs. narration** table. Animate processes, change, geometry, correspondence.
    Narrate motivation, history, caveats. Out-of-scope items are listed explicitly.
 
+## Audience contract (Stage A2)
+See `references/pedagogy.md` and the template `projects/_template/audience.md`. The outline
+says *what* the source claims; the contract says *what this viewer needs* to follow it.
+It is approved by the user before Stage B.
+
 ## Storyboard (Stage B)
 Header: total target length, scene count, **concept → color mapping**, status legend.
+
+Header also lists the approved `audience.md` and, per scene, the motivation-chain question it
+answers. Every `teach` item from the contract must appear as beats in some scene.
 
 Per scene:
 ```

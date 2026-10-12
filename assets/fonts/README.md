@@ -1,14 +1,14 @@
 # Fonts
 
 Font files are **downloaded, not stored in git**. `fonts.toml` pins every file to an
-upstream release/tag with a sha256 checksum; `scripts/fonts.py` fetches and verifies them.
+upstream release/tag with a sha256 checksum; `myanim fonts` fetches and verifies them.
 `components/fonts.py` registers whatever is here with Pango at import time, so renders do
 not depend on system-installed fonts.
 
 ```bash
-uv run python scripts/fonts.py sync      # after cloning: core fonts + CJK regions used by any project
-uv run python scripts/fonts.py list      # status
-uv run python scripts/fonts.py verify    # re-check checksums
+myanim fonts sync      # after cloning: core fonts + CJK regions used by any project
+myanim fonts list      # status
+myanim fonts verify    # re-check checksums
 ```
 If fonts are missing, importing `components` fails with the exact command to run.
 
